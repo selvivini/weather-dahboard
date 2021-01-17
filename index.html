@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather-Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+</head>
+<body>
+    <div class="container-fluid">
+      <div class="jumobtron bg-secondary">
+          <h1 class= "text-light text-center m-3 p-3">Weather Dashboard</h1>
+      </div>
+     
+        
+            <div class="row">
+                <div class="col-md-3 bg-light">
+                  <h3>Search For a City:</h3>
+                  <div class=" input-group mb-3">
+                 <input type="search" class="form-control " id="cityName" placeholder="city name">
+                  <span><button class="btn btn-primary" id= "searchBtn"><i class="fas fa-search"></i></button></span>
+                  </div>
+                  <div class= "city-list">
+                      <div class= "card">
+                        <!-- <ul class="list-group" id="city-group">
+                            <li class="list-group-item">Cras justo odio</li>
+                            <li class="list-group-item">Dapibus ac facilisis in</li>
+                            <li class="list-group-item">Morbi leo risus</li>
+                            <li class="list-group-item">Porta ac consectetur ac</li>
+                            <li class="list-group-item">Vestibulum at eros</li>
+                          </ul> -->
+                      </div>
+                   
+                  </div>
+                   </div>
+                   <div class= "col-md-9">
+                    <div class="card mt-3">
+                        <div class="card-body">
+                        <div id= "temp-div" class= "bg-light"></div>
+                      </div>
+                     </div>
+                      <div id = "id-forecast">
+                       <h3>5 day Forecast</h3>
+                      </div>
+                    </div>
+                    
+                   </div>
+                </div>
+              
+        
+      </div>
+     
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script src= "script.js"></script>
+</body>
+</html>
