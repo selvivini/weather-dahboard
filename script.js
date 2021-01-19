@@ -8,7 +8,7 @@ $(document).ready(function(){
    
   function getWeather(cityName){
   
-  query_url = "http://api.openweathermap.org/data/2.5/weather?&q="+ cityName+ "&appid="+ api_key
+  query_url = "https://api.openweathermap.org/data/2.5/weather?&q="+ cityName+ "&appid="+ api_key
  // to get temp,humidity and wind speed
   $.ajax({url: query_url, method:"GET"}).done(function(weatherData){
    setStorage(weatherData);
@@ -18,7 +18,7 @@ $(document).ready(function(){
     $(date).addClass("ml-3")
    date = moment().format("L")
    
-   var imgIcon = $("<img>").attr("src", "http://openweathermap.org/img/wn/"+ weatherData.weather[0].icon+"@2x.png")
+   var imgIcon = $("<img>").attr("src", "https://openweathermap.org/img/wn/"+ weatherData.weather[0].icon+"@2x.png")
    $("#temp-div").append("<h2>"+cityName+" "+"(" + date+ ")"+"</h2>");
    $("h2").append(imgIcon)
    var tempF = (weatherData.main.temp-273.15)*1.8 +32
@@ -31,7 +31,7 @@ $(document).ready(function(){
   var lat = weatherData.coord.lat
   var lon = weatherData.coord.lon
   // queryurl to get uv index
-  var uv_url = "http://api.openweathermap.org/data/2.5/uvi?appid=4e6c0474be6165dd35b8450501c8bd83&q=&lat="+lat +"&lon="+ lon
+  var uv_url = "https://api.openweathermap.org/data/2.5/uvi?appid=4e6c0474be6165dd35b8450501c8bd83&q=&lat="+lat +"&lon="+ lon
   
   $.ajax({url:uv_url, response:"GET"}).done(function(response){
     var uvI = $("<h5>").text("Uv Index: ")
