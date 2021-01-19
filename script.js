@@ -4,20 +4,17 @@ $(document).ready(function(){
 
    var searchHistory = JSON.parse(localStorage.getItem("history"))|| []
  
-
-  
-  // to get weather data
+   // to get current weather data
    
   function getWeather(cityName){
   
   query_url = "http://api.openweathermap.org/data/2.5/weather?&q="+ cityName+ "&appid="+ api_key
  // to get temp,humidity and wind speed
   $.ajax({url: query_url, method:"GET"}).done(function(weatherData){
-    console.log(weatherData)
-  setStorage(weatherData);
+   setStorage(weatherData);
    clear();
-
-    var date = weatherData.dt;
+   
+   var date = weatherData.dt;
     $(date).addClass("ml-3")
    date = moment().format("L")
    
@@ -51,7 +48,9 @@ $(document).ready(function(){
    $(uvI).append(uv_val)
    $("#temp-div").append(uvI)
   })
-    // 5 days forecast
+    
+  
+  // 5 days forecast
     url = "https://api.openweathermap.org/data/2.5/forecast?appid=4e6c0474be6165dd35b8450501c8bd83&q=" +cityName
     $.ajax({url:url, method:"Get"}).done(function(res){
       var data = res.list
