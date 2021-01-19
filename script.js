@@ -2,10 +2,11 @@
 
 $(document).ready(function(){
   var base_url = "http://api.openweathermap.org/data/2.5/weather?appid=4e6c0474be6165dd35b8450501c8bd83&q="
-
+  var searchHistory = JSON.parse(localStorage.getItem("history"))|| []
   
 
   function getUrl(){
+    clear();
     var cityName= $("#cityName").val().trim();
     // console.log(cityName)
     return base_url+ cityName
@@ -43,7 +44,7 @@ $(document).ready(function(){
   
    if($(uv_val).text()<=2){
      $(uv_val).addClass("bg-success  p-1 rounded text-light")
-   } else if($(uv_val).text()>2 && uv_val<=8){
+   } else if($(uv_val).text()>2 || uv_val<=8){
      $(uv_val).addClass("bg-warning p-1 rounded")
    } else if($(uv_val).text()>8){
      $(uv_val).addClass("bg-danger p-1 rounded text-light")
@@ -54,9 +55,8 @@ $(document).ready(function(){
   })
   }
   // 5 days forecast
-  function getForecast(){
-  
-   var cityName =  $("#cityName").val().trim();
+  function getForecast(weatherdata){
+   cityName =weatherdata.name;
    url = "https://api.openweathermap.org/data/2.5/forecast?appid=4e6c0474be6165dd35b8450501c8bd83&q=" +cityName
    $.ajax({url:url, method:"Get"}).done(function(res){
     var data = res.list
@@ -79,21 +79,40 @@ $(document).ready(function(){
   
    })
   }
-  
+  // sets localstorage with the cityname
   function setStorage(data){
-    console.log(data)
    var cityName = data.name;
-   console.log(cityName)
    var history = {city: cityName}
-   var pastSearch = JSON.parse(localStorage.getItem("history"))
-   if(pastSearch === null){
+  
+   
+   if(searchHistory === null){
     localStorage.setItem("history",JSON.stringify([{city:cityName}]))
+    
    }else{
-     pastSearch.push(history)
-     localStorage.setItem("history",JSON.stringify(pastSearch))
+     searchHistory.push(history)
+     localStorage.setItem("history",JSON.stringify(searchHistory))
+     createList(cityName);
    }
+  
    
   }
+  // function to create a city list
+  function createList(city){
+   var city_li=$("<li></li>").addClass("list-group-item list-group-item-action").text(city);
+   $("#city-history").prepend(city_li)
+   
+  }
+//  function to get list persistent on the page from localStorage
+ if(searchHistory.length>0){
+   for(i=0;i<searchHistory.length; i++){
+     createList(searchHistory[i].city)
+   }
+   
+ }
+
+
+  
+  // function to clear the elements for every search
   function clear(){
     $("#temp-div").empty()
     $("#fiveday-container").empty()
@@ -104,7 +123,21 @@ $(document).ready(function(){
   clear()
   var query_url = getUrl();
   // to get temp,humidity and wind speed
-  $.ajax({url: query_url, method:"GET"}).done(currentWeather, getForecast, setStorage)
-  
+  $.ajax({url: query_url, method:"GET"}).done(currentWeather, getForecast,setStorage,pastSearch, searchHistory)
+ 
   })
+  // function to get past search data
+  function pastSearch(data){
+    // eventListener on previous search list item
+    $("#city-history").on("click","li" ,function(){
+      console.log("clicked")
+      clear()
+      currentWeather(data);
+      getForecast(data)
+      
+    })
+  }
+  
+
+
 })
