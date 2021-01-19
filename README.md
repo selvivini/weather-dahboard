@@ -34,5 +34,4 @@ the following is the mockup image of this application
 ![weather-mockup](Assets/mockup-img.PNG)
 
 ## Github Page
-[weather-dashboard](https://selvivini.github.io/weather-dashboard/index.html)
-)
+[weather-dashboard](https://selvivini.github.io/weather-dashboard/)
