@@ -1,30 +1,28 @@
-// var query_url= "https://api.openweathermap.org/data/2.5/onecall?lat=33.441792&lon=-94.037689&exclude=hourly,minutely&appid=4e6c0474be6165dd35b8450501c8bd83"
 
 $(document).ready(function(){
-  var base_url = "http://api.openweathermap.org/data/2.5/weather?appid=4e6c0474be6165dd35b8450501c8bd83&q="
-  var searchHistory = JSON.parse(localStorage.getItem("history"))|| []
-  
+  var api_key= "4e6c0474be6165dd35b8450501c8bd83"
 
-  function getUrl(){
-    clear();
-    var cityName= $("#cityName").val().trim();
-    // console.log(cityName)
-    return base_url+ cityName
-    
-  }
-  // to get today's weather
-  // weatherData is the response that we get from the ajax call
-  function currentWeather(weatherData){
-  //  console.log(weatherData)
+   var searchHistory = JSON.parse(localStorage.getItem("history"))|| []
  
-   var nameDiv =weatherData.name
-  var date = weatherData.dt;
-   $(date).addClass("ml-3")
-  date = moment().format("L")
+
   
-  var imgIcon = $("<img>").attr("src", "http://openweathermap.org/img/wn/"+ weatherData.weather[0].icon+"@2x.png")
+  // to get weather data
+   
+  function getWeather(cityName){
   
-   $("#temp-div").append("<h2>"+nameDiv+" "+"(" + date+ ")"+"</h2>");
+  query_url = "http://api.openweathermap.org/data/2.5/weather?&q="+ cityName+ "&appid="+ api_key
+ // to get temp,humidity and wind speed
+  $.ajax({url: query_url, method:"GET"}).done(function(weatherData){
+    console.log(weatherData)
+  setStorage(weatherData);
+   clear();
+
+    var date = weatherData.dt;
+    $(date).addClass("ml-3")
+   date = moment().format("L")
+   
+   var imgIcon = $("<img>").attr("src", "http://openweathermap.org/img/wn/"+ weatherData.weather[0].icon+"@2x.png")
+   $("#temp-div").append("<h2>"+cityName+" "+"(" + date+ ")"+"</h2>");
    $("h2").append(imgIcon)
    var tempF = (weatherData.main.temp-273.15)*1.8 +32
   $("#temp-div").append("<h5> Temperature: "+ tempF.toFixed(1)+"'F </h5>")
@@ -53,35 +51,32 @@ $(document).ready(function(){
    $(uvI).append(uv_val)
    $("#temp-div").append(uvI)
   })
-  }
-  // 5 days forecast
-  function getForecast(weatherdata){
-   cityName =weatherdata.name;
-   url = "https://api.openweathermap.org/data/2.5/forecast?appid=4e6c0474be6165dd35b8450501c8bd83&q=" +cityName
-   $.ajax({url:url, method:"Get"}).done(function(res){
-    var data = res.list
-    
-   for(i=0; i<data.length; i=i+8){
-     var dt =moment(data[i].dt_txt).format("L")
-   
-     var dailyCard = $("<div></div>").addClass("card bg-primary m-3 p-2");
-     var dailyDate = $("<h5></h5>").addClass("card-title text-light").text(dt)
-     var icon = $("<img>").attr("src","http://openweathermap.org/img/wn/"+data[i].weather[0].icon+"@2x.png")
-     var calTemp = (data[i].main.temp-273.5)*1.8+32
-     var dailyTemp = $("<h5></h5>").text("Temp: "+calTemp.toFixed(1)+"'F").addClass("text-light text-center")
-     var dailyHumidity = $("<h5></h5>").text("Humidity: "+data[i].main.humidity+ "%").addClass("text-light text-center")
+    // 5 days forecast
+    url = "https://api.openweathermap.org/data/2.5/forecast?appid=4e6c0474be6165dd35b8450501c8bd83&q=" +cityName
+    $.ajax({url:url, method:"Get"}).done(function(res){
+      var data = res.list
+      // $("#fiveday-container").empty()
+     for(i=0; i<data.length; i=i+8){
+       var dt =moment(data[i].dt_txt).format("L")
      
-     $(dailyCard).append(dailyDate, icon, dailyTemp, dailyHumidity);
-     $("#fiveday-container").append(dailyCard)
-   }
-   
-  
-  
-   })
+       var dailyCard = $("<div></div>").addClass("card bg-primary m-3 p-2");
+       var dailyDate = $("<h5></h5>").addClass("card-title text-light").text(dt)
+       var icon = $("<img>").attr("src","http://openweathermap.org/img/wn/"+data[i].weather[0].icon+"@2x.png")
+       var calTemp = (data[i].main.temp-273.5)*1.8+32
+       var dailyTemp = $("<h5></h5>").text("Temp: "+calTemp.toFixed(1)+"'F").addClass("text-light text-center")
+       var dailyHumidity = $("<h5></h5>").text("Humidity: "+data[i].main.humidity+ "%").addClass("text-light text-center")
+       
+       $(dailyCard).append(dailyDate, icon, dailyTemp, dailyHumidity);
+       $("#fiveday-container").append(dailyCard)
+     }
+     })
+  })
   }
+ 
+  
   // sets localstorage with the cityname
-  function setStorage(data){
-   var cityName = data.name;
+  function setStorage(weatherData){
+   var cityName = weatherData.name;
    var history = {city: cityName}
   
    
@@ -97,17 +92,17 @@ $(document).ready(function(){
    
   }
   // function to create a city list
-  function createList(city){
-   var city_li=$("<li></li>").addClass("list-group-item list-group-item-action").text(city);
+  function createList(cityName){
+   var city_li=$("<li></li>").addClass("list-group-item list-group-item-action").text(cityName);
    $("#city-history").prepend(city_li)
    
   }
-//  function to get list persistent on the page from localStorage
+//  function to get last searched city persistent on the page from localStorage
  if(searchHistory.length>0){
    for(i=0;i<searchHistory.length; i++){
      createList(searchHistory[i].city)
    }
-   
+   getWeather(searchHistory[searchHistory.length-1].city)
  }
 
 
@@ -118,26 +113,19 @@ $(document).ready(function(){
     $("#fiveday-container").empty()
   }
   
+  // event listener to get the value of city input
   $("#searchBtn").on("click", function(event){
   event.preventDefault();
   clear()
-  var query_url = getUrl();
-  // to get temp,humidity and wind speed
-  $.ajax({url: query_url, method:"GET"}).done(currentWeather, getForecast,setStorage,pastSearch, searchHistory)
- 
+  var cityName= $("#cityName").val().trim();
+  $("#cityName").val("")
+ getWeather(cityName)
   })
-  // function to get past search data
-  function pastSearch(data){
-    // eventListener on previous search list item
-    $("#city-history").on("click","li" ,function(){
-      console.log("clicked")
-      clear()
-      currentWeather(data);
-      getForecast(data)
-      
-    })
-  }
-  
-
+ 
+  // event-listener on previous search cities list
+  $("#city-history").on("click","li" ,function(){
+   clear()
+   getWeather($(this).text())
+  })
 
 })
