@@ -96,7 +96,7 @@ $(document).ready(function(){
    $("#city-history").prepend(city_li)
    
   }
-//  function to get last searched city persistent on the page from localStorage
+// to get last searched city persistent on the page from localStorage
  if(searchHistory.length>0){
    for(i=0;i<searchHistory.length; i++){
      createList(searchHistory[i].city)
