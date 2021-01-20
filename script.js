@@ -22,7 +22,7 @@ $(document).ready(function(){
    $("#temp-div").append("<h2>"+cityName+" "+"(" + date+ ")"+"</h2>");
    $("h2").append(imgIcon)
    var tempF = (weatherData.main.temp-273.15)*1.8 +32
-  $("#temp-div").append("<h5> Temperature: "+ tempF.toFixed(1)+"'F </h5>")
+  $("#temp-div").append("<h5> Temperature: "+ tempF.toFixed(1)+"°F </h5>")
   var humidity = weatherData.main.humidity;
   $("#temp-div").append("<h5> Humidity: "+ humidity + "% </h5>")
   var windSpeed = weatherData.wind.speed;
@@ -62,7 +62,7 @@ $(document).ready(function(){
        var dailyDate = $("<h5></h5>").addClass("card-title text-light").text(dt)
        var icon = $("<img>").attr("src","https://openweathermap.org/img/wn/"+data[i].weather[0].icon+"@2x.png")
        var calTemp = (data[i].main.temp-273.5)*1.8+32
-       var dailyTemp = $("<h5></h5>").text("Temp: "+calTemp.toFixed(1)+"'F").addClass("text-light text-center")
+       var dailyTemp = $("<h5></h5>").text("Temp: "+calTemp.toFixed(1)+"°F").addClass("text-light text-center")
        var dailyHumidity = $("<h5></h5>").text("Humidity: "+data[i].main.humidity+ "%").addClass("text-light text-center")
        
        $(dailyCard).append(dailyDate, icon, dailyTemp, dailyHumidity);
