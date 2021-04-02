@@ -1,4 +1,4 @@
-# Weather-Dashboard
+# Weather-Dashboard [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 Created a weather Dashboard that displays the current weather and weather forecast for next 5 days
 using the open weather public Api. Have used local storage to get persistent data for the app.Built 
 this application using Jquery, bootstrap and Moment.js libraries.
